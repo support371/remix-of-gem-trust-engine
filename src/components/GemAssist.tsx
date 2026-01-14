@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Bot, User, Loader2 } from "lucide-react";
+import { MessageCircle, X, Send, Bot, User, Loader2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 
 type Message = {
   role: "user" | "assistant";
@@ -11,6 +12,13 @@ type Message = {
 };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/gem-assist`;
+
+const quickActions = [
+  { label: "Improve security posture", message: "How can I improve my organization's security posture?" },
+  { label: "Monitoring & detection", message: "Tell me about your monitoring and detection capabilities." },
+  { label: "Incident readiness", message: "How can you help with incident readiness and response?" },
+  { label: "Talk to a human", message: "I'd like to speak with a security expert directly." },
+];
 
 export const GemAssist = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -100,10 +108,11 @@ export const GemAssist = () => {
     return assistantContent;
   }, []);
 
-  const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+  const handleSend = async (messageText?: string) => {
+    const textToSend = messageText || input.trim();
+    if (!textToSend || isLoading) return;
 
-    const userMessage: Message = { role: "user", content: input.trim() };
+    const userMessage: Message = { role: "user", content: textToSend };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
@@ -128,6 +137,16 @@ export const GemAssist = () => {
       e.preventDefault();
       handleSend();
     }
+  };
+
+  const handleQuickAction = (action: typeof quickActions[0]) => {
+    if (action.label === "Talk to a human") {
+      // Redirect to contact page
+      setIsOpen(false);
+      window.location.href = "/contact";
+      return;
+    }
+    handleSend(action.message);
   };
 
   return (
@@ -159,10 +178,10 @@ export const GemAssist = () => {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
             className={cn(
-              "fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-48px)]",
-              "h-[520px] max-h-[calc(100vh-120px)]",
+              "fixed bottom-6 right-6 z-50 w-[400px] max-w-[calc(100vw-48px)]",
+              "h-[560px] max-h-[calc(100vh-120px)]",
               "glass-panel rounded-2xl overflow-hidden flex flex-col",
-              "border border-border shadow-xl"
+              "border border-border shadow-xl backdrop-blur-xl"
             )}
           >
             {/* Header */}
@@ -192,14 +211,27 @@ export const GemAssist = () => {
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.length === 0 && (
-                <div className="text-center py-8">
+                <div className="text-center py-6">
                   <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary/10 flex items-center justify-center">
                     <Bot className="w-8 h-8 text-primary" />
                   </div>
-                  <h4 className="font-semibold text-foreground mb-2">Welcome to Gem-Assist</h4>
-                  <p className="text-sm text-muted-foreground max-w-[250px] mx-auto">
-                    I'm your cybersecurity concierge. How can I help protect your organization today?
+                  <h4 className="font-semibold text-foreground mb-2">What are you trying to protect today?</h4>
+                  <p className="text-sm text-muted-foreground max-w-[280px] mx-auto mb-6">
+                    I'm your cybersecurity concierge. Ask me anything about security.
                   </p>
+                  
+                  {/* Quick Action Chips */}
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {quickActions.map((action) => (
+                      <button
+                        key={action.label}
+                        onClick={() => handleQuickAction(action)}
+                        className="px-3 py-1.5 rounded-full text-xs font-medium glass-panel text-muted-foreground hover:text-foreground hover:border-primary/30 transition-colors"
+                      >
+                        {action.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
 
@@ -274,7 +306,7 @@ export const GemAssist = () => {
                 <Button
                   variant="hero"
                   size="icon"
-                  onClick={handleSend}
+                  onClick={() => handleSend()}
                   disabled={!input.trim() || isLoading}
                   className="shrink-0"
                 >
