@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Shield, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const navLinks = [
   { label: "Solutions", href: "/solutions" },
@@ -14,6 +15,7 @@ const navLinks = [
 export const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,7 +33,6 @@ export const Navigation = () => {
       )}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
-        {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
           <div className="relative">
             <Shield className="w-8 h-8 text-primary transition-all duration-300 group-hover:scale-110" />
@@ -43,7 +44,6 @@ export const Navigation = () => {
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
             <Link
@@ -57,17 +57,28 @@ export const Navigation = () => {
           ))}
         </nav>
 
-        {/* CTA Buttons */}
         <div className="hidden md:flex items-center gap-3">
-          <Button variant="ghost" size="sm">
-            Sign In
-          </Button>
-          <Button variant="hero" size="sm">
-            Get Protected
-          </Button>
+          {user ? (
+            <>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/dashboard">Dashboard</Link>
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => signOut()}>
+                Sign Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/login">Sign In</Link>
+              </Button>
+              <Button variant="hero" size="sm" asChild>
+                <Link to="/contact">Get Protected</Link>
+              </Button>
+            </>
+          )}
         </div>
 
-        {/* Mobile Menu Toggle */}
         <button
           className="md:hidden p-2 text-foreground"
           onClick={() => setIsMobileOpen(!isMobileOpen)}
@@ -76,7 +87,6 @@ export const Navigation = () => {
         </button>
       </div>
 
-      {/* Mobile Navigation */}
       {isMobileOpen && (
         <div className="md:hidden glass-panel mt-2 mx-4 rounded-xl p-4 animate-scale-in">
           <nav className="flex flex-col gap-2">
@@ -91,10 +101,25 @@ export const Navigation = () => {
               </Link>
             ))}
             <div className="border-t border-border pt-4 mt-2 flex flex-col gap-2">
-              <Button variant="ghost" className="justify-start">
-                Sign In
-              </Button>
-              <Button variant="hero">Get Protected</Button>
+              {user ? (
+                <>
+                  <Button variant="ghost" className="justify-start" asChild>
+                    <Link to="/dashboard" onClick={() => setIsMobileOpen(false)}>Dashboard</Link>
+                  </Button>
+                  <Button variant="outline" onClick={() => { signOut(); setIsMobileOpen(false); }}>
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant="ghost" className="justify-start" asChild>
+                    <Link to="/login" onClick={() => setIsMobileOpen(false)}>Sign In</Link>
+                  </Button>
+                  <Button variant="hero" asChild>
+                    <Link to="/contact" onClick={() => setIsMobileOpen(false)}>Get Protected</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </nav>
         </div>
