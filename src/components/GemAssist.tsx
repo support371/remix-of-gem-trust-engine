@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Bot, User, Loader2, ArrowRight } from "lucide-react";
+import { MessageCircle, X, Send, Bot, User, Loader2, ArrowRight, Zap, Shield, AlertTriangle, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -14,10 +14,10 @@ type Message = {
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/gem-assist`;
 
 const quickActions = [
-  { label: "Improve security posture", message: "How can I improve my organization's security posture?" },
-  { label: "Monitoring & detection", message: "Tell me about your monitoring and detection capabilities." },
-  { label: "Incident readiness", message: "How can you help with incident readiness and response?" },
-  { label: "Talk to a human", message: "I'd like to speak with a security expert directly." },
+  { label: "Services", message: "Tell me about your security services.", icon: Shield },
+  { label: "Recovery", message: "How does asset recovery work?", icon: Zap },
+  { label: "Pricing", message: "What are your pricing plans?", icon: AlertTriangle },
+  { label: "Live Agent", message: "I'd like to speak with a security expert directly.", icon: Phone },
 ];
 
 export const GemAssist = () => {
@@ -140,8 +140,7 @@ export const GemAssist = () => {
   };
 
   const handleQuickAction = (action: typeof quickActions[0]) => {
-    if (action.label === "Talk to a human") {
-      // Redirect to contact page
+    if (action.label === "Live Agent") {
       setIsOpen(false);
       window.location.href = "/contact";
       return;
@@ -155,18 +154,29 @@ export const GemAssist = () => {
       <motion.button
         onClick={() => setIsOpen(true)}
         className={cn(
-          "fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full",
-          "bg-primary text-primary-foreground shadow-lg",
-          "flex items-center justify-center",
-          "hover:scale-105 transition-transform",
+          "fixed bottom-6 right-6 z-50",
+          "glass-panel rounded-2xl px-4 py-3 border border-primary/20",
+          "flex items-center gap-3",
+          "hover:border-primary/40 hover:glow-cyan transition-all",
           isOpen && "hidden"
         )}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        aria-label="Open Gem-Assist"
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        aria-label="Open GEM AI Assistant"
       >
-        <MessageCircle className="w-6 h-6" />
-        <span className="absolute -top-1 -right-1 w-3 h-3 bg-success rounded-full animate-pulse" />
+        <div className="relative">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+            <Bot className="w-5 h-5 text-primary" />
+          </div>
+          <span className="absolute -top-1 -right-1 w-3 h-3 bg-success rounded-full animate-pulse border-2 border-background" />
+        </div>
+        <div className="text-left hidden sm:block">
+          <span className="text-sm font-semibold text-foreground block">GEM AI Assistant</span>
+          <span className="text-xs text-success flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-success" />
+            ARIA • Enterprise Support
+          </span>
+        </div>
       </motion.button>
 
       {/* Chat Panel */}
@@ -178,24 +188,27 @@ export const GemAssist = () => {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
             className={cn(
-              "fixed bottom-6 right-6 z-50 w-[400px] max-w-[calc(100vw-48px)]",
-              "h-[560px] max-h-[calc(100vh-120px)]",
+              "fixed bottom-6 right-6 z-50 w-[420px] max-w-[calc(100vw-48px)]",
+              "h-[600px] max-h-[calc(100vh-120px)]",
               "glass-panel rounded-2xl overflow-hidden flex flex-col",
-              "border border-border shadow-xl backdrop-blur-xl"
+              "border border-border shadow-2xl backdrop-blur-xl"
             )}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-border bg-card/50">
+            <div className="flex items-center justify-between p-4 border-b border-border bg-card/80">
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <Bot className="w-5 h-5 text-primary" />
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center border border-primary/20">
+                    <Bot className="w-6 h-6 text-primary" />
                   </div>
-                  <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-success rounded-full border-2 border-card" />
+                  <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-success rounded-full border-2 border-card" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground text-sm">Gem-Assist</h3>
-                  <p className="text-xs text-success">Online</p>
+                  <h3 className="font-semibold text-foreground">GEM AI Assistant</h3>
+                  <p className="text-xs text-success flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+                    ARIA • GEM Enterprise
+                  </p>
                 </div>
               </div>
               <Button
@@ -211,26 +224,42 @@ export const GemAssist = () => {
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.length === 0 && (
-                <div className="text-center py-6">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary/10 flex items-center justify-center">
-                    <Bot className="w-8 h-8 text-primary" />
+                <div className="py-4">
+                  {/* Welcome Card */}
+                  <div className="glass-panel rounded-xl p-4 mb-4 border border-primary/10">
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                        <Bot className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-foreground text-sm">Enterprise AI Support</h4>
+                        <p className="text-xs text-muted-foreground">Powered by ARIA</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-foreground/90 mb-1">
+                      Hello! I'm ARIA, your GEM Enterprise AI assistant. I'm here to help with cybersecurity, real estate, and any questions about our services.
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      How can I assist you today?
+                    </p>
+                    <p className="text-[10px] text-muted-foreground/60 mt-2">02:23 PM</p>
                   </div>
-                  <h4 className="font-semibold text-foreground mb-2">What are you trying to protect today?</h4>
-                  <p className="text-sm text-muted-foreground max-w-[280px] mx-auto mb-6">
-                    I'm your cybersecurity concierge. Ask me anything about security.
-                  </p>
                   
                   {/* Quick Action Chips */}
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {quickActions.map((action) => (
-                      <button
-                        key={action.label}
-                        onClick={() => handleQuickAction(action)}
-                        className="px-3 py-1.5 rounded-full text-xs font-medium glass-panel text-muted-foreground hover:text-foreground hover:border-primary/30 transition-colors"
-                      >
-                        {action.label}
-                      </button>
-                    ))}
+                  <div className="flex flex-wrap gap-2">
+                    {quickActions.map((action) => {
+                      const Icon = action.icon;
+                      return (
+                        <button
+                          key={action.label}
+                          onClick={() => handleQuickAction(action)}
+                          className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium glass-panel text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all border border-transparent"
+                        >
+                          <Icon className="w-3.5 h-3.5" />
+                          {action.label}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -291,7 +320,7 @@ export const GemAssist = () => {
             </div>
 
             {/* Input */}
-            <div className="p-4 border-t border-border bg-card/50">
+            <div className="p-4 border-t border-border bg-card/80">
               <div className="flex gap-2">
                 <input
                   ref={inputRef}
@@ -299,8 +328,8 @@ export const GemAssist = () => {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ask about cybersecurity..."
-                  className="flex-1 bg-secondary rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  placeholder="Type your message..."
+                  className="flex-1 bg-secondary rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                   disabled={isLoading}
                 />
                 <Button
@@ -308,14 +337,21 @@ export const GemAssist = () => {
                   size="icon"
                   onClick={() => handleSend()}
                   disabled={!input.trim() || isLoading}
-                  className="shrink-0"
+                  className="shrink-0 h-12 w-12"
                 >
                   <Send className="w-4 h-4" />
                 </Button>
               </div>
-              <p className="text-[10px] text-muted-foreground/60 mt-2 text-center">
-                Powered by GEM Cybersecurity AI
-              </p>
+              
+              {/* Connect to Live Agent */}
+              <div className="mt-3 flex items-center justify-between">
+                <p className="text-[10px] text-muted-foreground/60">
+                  Connecting you to a live agent...
+                </p>
+                <Button variant="ghost" size="sm" asChild className="text-xs text-primary">
+                  <Link to="/contact">Connect Now</Link>
+                </Button>
+              </div>
             </div>
           </motion.div>
         )}
