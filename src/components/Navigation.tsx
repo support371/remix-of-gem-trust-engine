@@ -4,6 +4,7 @@ import { Shield, Menu, X, Github, Lock, Users, Newspaper, Mail, Radar, Building2
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -185,7 +186,8 @@ export const Navigation = () => {
         </nav>
 
         {/* Desktop Auth Buttons */}
-        <div className="hidden lg:flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-2">
+          <ThemeToggle />
           {user ? (
             <>
               <Button variant="ghost" size="sm" asChild>
@@ -281,6 +283,10 @@ export const Navigation = () => {
             ))}
             
             <div className="border-t border-border pt-4 mt-2 flex flex-col gap-2">
+              <div className="flex items-center justify-between px-4 py-2">
+                <span className="text-sm text-muted-foreground">Theme</span>
+                <ThemeToggle />
+              </div>
               {user ? (
                 <>
                   <Button variant="ghost" className="justify-start" asChild>
