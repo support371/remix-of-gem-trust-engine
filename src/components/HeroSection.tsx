@@ -4,6 +4,7 @@ import { ArrowRight, Shield, Lock, Eye, Zap, CheckCircle2, Clock, Building2, Act
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import socImage from "@/assets/soc-operations-center.jpg";
+import { NetworkParticles } from "@/components/NetworkParticles";
 
 type AudienceType = "ciso" | "it-ops" | "founder";
 
@@ -66,9 +67,14 @@ export const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20 pb-16 overflow-hidden">
+      {/* Network Particle Animation Background */}
+      <div className="absolute inset-0">
+        <NetworkParticles />
+      </div>
+      
       {/* Background Effects */}
       <div className="absolute inset-0 cyber-grid opacity-20" />
-      <div className="absolute top-0 left-0 w-full h-full">
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/8 rounded-full blur-[150px] animate-pulse-slow" />
         <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-accent/15 rounded-full blur-[120px] animate-pulse-slow" style={{ animationDelay: '2s' }} />
         <div className="absolute top-1/2 right-1/3 w-[300px] h-[300px] bg-primary/5 rounded-full blur-[100px] animate-pulse-slow" style={{ animationDelay: '4s' }} />
