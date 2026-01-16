@@ -1,5 +1,12 @@
 import { motion } from "framer-motion";
-import { Quote, Building2, Shield, Heart, Star, User } from "lucide-react";
+import { Quote, Building2, Shield, Heart, Star } from "lucide-react";
+
+// Import client headshots
+import michaelReynoldsImg from "@/assets/testimonials/michael-reynolds.jpg";
+import jenniferWalshImg from "@/assets/testimonials/jennifer-walsh.jpg";
+import davidChenImg from "@/assets/testimonials/david-chen.jpg";
+import emilyRodriguezImg from "@/assets/testimonials/emily-rodriguez.jpg";
+import sarahChenImg from "@/assets/testimonials/sarah-chen.jpg";
 
 interface Testimonial {
   id: number;
@@ -8,8 +15,7 @@ interface Testimonial {
   role: string;
   company: string;
   companyType: string;
-  logo?: string;
-  avatar?: string;
+  avatar: string;
   metrics?: { label: string; value: string }[];
   featured?: boolean;
 }
@@ -31,6 +37,7 @@ const testimonials: Testimonial[] = [
     role: "Chief Information Security Officer",
     company: "Fortune 100 Financial Institution",
     companyType: "Financial",
+    avatar: michaelReynoldsImg,
     metrics: [
       { label: "Incident Reduction", value: "94%" },
       { label: "Assets Protected", value: "$50B+" },
@@ -45,6 +52,7 @@ const testimonials: Testimonial[] = [
     role: "IT Security Director",
     company: "Global Manufacturing Corp",
     companyType: "Manufacturing",
+    avatar: jenniferWalshImg,
     metrics: [
       { label: "Recovered", value: "$2.3M" }
     ]
@@ -56,6 +64,7 @@ const testimonials: Testimonial[] = [
     role: "Chief Technology Officer",
     company: "Healthcare Network",
     companyType: "Healthcare",
+    avatar: davidChenImg,
     metrics: [
       { label: "Compliance Rate", value: "100%" }
     ]
@@ -66,7 +75,8 @@ const testimonials: Testimonial[] = [
     author: "Emily Rodriguez",
     role: "VP of Engineering",
     company: "TechCorp",
-    companyType: "Technology"
+    companyType: "Technology",
+    avatar: emilyRodriguezImg
   },
   {
     id: 5,
@@ -74,7 +84,8 @@ const testimonials: Testimonial[] = [
     author: "Sarah Chen",
     role: "CISO",
     company: "SecureTech",
-    companyType: "Security"
+    companyType: "Security",
+    avatar: sarahChenImg
   }
 ];
 
@@ -133,8 +144,12 @@ export const TestimonialsSection = () => {
                 <div className="flex items-center gap-4">
                   {/* Client Photo */}
                   <div className="relative">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center ring-2 ring-primary/20">
-                      <User className="w-8 h-8 text-primary" />
+                    <div className="w-16 h-16 rounded-full ring-2 ring-primary/20 overflow-hidden">
+                      <img 
+                        src={featured.avatar} 
+                        alt={featured.author}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                     <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-success flex items-center justify-center">
                       <Star className="w-3 h-3 text-success-foreground fill-current" />
@@ -199,8 +214,12 @@ export const TestimonialsSection = () => {
                 <div className="flex items-start justify-between gap-3 mb-4">
                   <div className="flex items-center gap-3">
                     {/* Client Photo */}
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-secondary to-secondary/50 flex items-center justify-center ring-2 ring-border group-hover:ring-primary/30 transition-colors">
-                      <User className="w-6 h-6 text-muted-foreground" />
+                    <div className="w-12 h-12 rounded-full ring-2 ring-border group-hover:ring-primary/30 transition-colors overflow-hidden">
+                      <img 
+                        src={testimonial.avatar} 
+                        alt={testimonial.author}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                     <div>
                       <h4 className="font-semibold text-foreground text-sm">{testimonial.author}</h4>
