@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Lock, Eye, Zap, CheckCircle2, Clock, Building2, Activity, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import socImage from "@/assets/soc-operations-center.jpg";
 
 type AudienceType = "ciso" | "it-ops" | "founder";
 
@@ -195,23 +196,20 @@ export const HeroSection = () => {
           >
             {/* Main Dashboard Card */}
             <div className="relative">
-              {/* SOC Image Placeholder with Gradient Border */}
+              {/* SOC Image with Gradient Border */}
               <div className="relative glass-panel rounded-2xl p-1 glow-cyan overflow-hidden">
-                <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-gradient-to-br from-secondary to-background">
-                  {/* Simulated SOC Dashboard */}
-                  <div className="absolute inset-0 cyber-grid opacity-30" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center p-8">
-                      <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-primary/10 flex items-center justify-center animate-pulse-slow">
-                        <Shield className="w-10 h-10 text-primary" />
-                      </div>
-                      <h3 className="text-lg font-semibold text-foreground mb-2">Security Operations Center</h3>
-                      <p className="text-sm text-muted-foreground">Live Monitoring Active</p>
-                    </div>
-                  </div>
+                <div className="relative aspect-[16/10] rounded-xl overflow-hidden">
+                  {/* Actual SOC Image */}
+                  <img 
+                    src={socImage} 
+                    alt="Security Operations Center with multiple monitoring screens displaying real-time cybersecurity dashboards"
+                    className="w-full h-full object-cover"
+                  />
+                  {/* Overlay gradient for better text readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-background/20" />
                   
                   {/* Floating Status Cards */}
-                  <div className="absolute top-4 left-4 glass-panel rounded-lg px-3 py-2 flex items-center gap-2">
+                  <div className="absolute top-4 left-4 glass-panel rounded-lg px-3 py-2 flex items-center gap-2 backdrop-blur-md">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-success" />
@@ -219,7 +217,7 @@ export const HeroSection = () => {
                     <span className="text-xs font-medium text-foreground">Systems Operational</span>
                   </div>
 
-                  <div className="absolute bottom-4 right-4 glass-panel rounded-lg px-3 py-2">
+                  <div className="absolute bottom-4 right-4 glass-panel rounded-lg px-3 py-2 backdrop-blur-md">
                     <div className="flex items-center gap-4 text-xs">
                       <div>
                         <span className="font-bold text-foreground">1,247</span>
@@ -231,6 +229,15 @@ export const HeroSection = () => {
                         <span className="text-muted-foreground ml-1">Uptime</span>
                       </div>
                     </div>
+                  </div>
+
+                  {/* Live indicator */}
+                  <div className="absolute top-4 right-4 glass-panel rounded-full px-3 py-1 flex items-center gap-2 backdrop-blur-md">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-destructive" />
+                    </span>
+                    <span className="text-xs font-bold text-destructive">LIVE</span>
                   </div>
                 </div>
               </div>

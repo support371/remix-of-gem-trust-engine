@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import { TrendingUp, Users, Shield, DollarSign } from "lucide-react";
 
 interface StatItem {
@@ -48,8 +48,15 @@ const stats: StatItem[] = [
 
 export const StatsSection = () => {
   const [animatedStats, setAnimatedStats] = useState(stats.map(() => 0));
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   useEffect(() => {
+    if (!isInView || hasAnimated) return;
+    
+    setHasAnimated(true);
+    
     const timers = stats.map((stat, index) => {
       const duration = 2000;
       const steps = 60;
@@ -70,10 +77,10 @@ export const StatsSection = () => {
     });
 
     return () => timers.forEach(t => clearInterval(t));
-  }, []);
+  }, [isInView, hasAnimated]);
 
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section ref={sectionRef} className="py-24 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5" />
       
