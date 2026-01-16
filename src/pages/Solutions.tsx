@@ -2,6 +2,7 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { GemAssist } from "@/components/GemAssist";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { ServiceTierComparison } from "@/components/ServiceTierComparison";
 import { Button } from "@/components/ui/button";
 import { 
   Shield, Radar, Lock, Building2, 
@@ -136,6 +137,9 @@ const Solutions = () => {
             </AnimatedSection>
           </div>
         </section>
+
+        {/* Service Tier Comparison */}
+        <ServiceTierComparison />
 
         {/* CTA */}
         <section className="py-16">
