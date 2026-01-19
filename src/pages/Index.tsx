@@ -1,8 +1,8 @@
 import { Navigation } from "@/components/Navigation";
 import { HeroSection } from "@/components/HeroSection";
-import { BentoGrid } from "@/components/BentoGrid";
-import { StatsSection } from "@/components/StatsSection";
+import { ServicesSection } from "@/components/ServicesSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
+import { EmergencySection } from "@/components/EmergencySection";
 import { TrustSection } from "@/components/TrustSection";
 import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
@@ -14,9 +14,9 @@ const Index = () => {
       <Navigation />
       <main>
         <HeroSection />
-        <BentoGrid />
-        <StatsSection />
+        <ServicesSection />
         <TestimonialsSection />
+        <EmergencySection />
         <TrustSection />
         <CTASection />
       </main>
